@@ -1,26 +1,12 @@
-FROM debian:buster-slim
+FROM buildpack-deps:buster
 
 ENV LANG C.UTF-8
 
-# common haskell + stack dependencies
+# additional haskell specific deps
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        dpkg-dev \
-        git \
-        gcc \
-        gnupg \
-        g++ \
-        libc6-dev \
-        libffi-dev \
-        libgmp-dev \
         libnuma-dev \
-        libtinfo-dev \
-        make \
-        netbase \
-        xz-utils \
-        zlib1g-dev && \
+        libtinfo-dev && \
     rm -rf /var/lib/apt/lists/*
 
 ARG STACK=2.9.1
@@ -100,8 +86,8 @@ RUN set -eux; \
     \
     cabal --version
 
-ARG GHC=9.2.4
-ARG GHC_RELEASE_KEY=88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4
+ARG GHC=9.4.2
+ARG GHC_RELEASE_KEY=FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD
 
 RUN set -eux; \
     cd /tmp; \
@@ -110,10 +96,10 @@ RUN set -eux; \
     # sha256 from https://downloads.haskell.org/~ghc/$GHC/SHA256SUMS
     case "$ARCH" in \
         'aarch64') \
-            GHC_SHA256='fc7dbc6bae36ea5ac30b7e9a263b7e5be3b45b0eb3e893ad0bc2c950a61f14ec'; \
+            GHC_SHA256='ea075c54143dde37ea50cd085af61abb1fcfce8913deac298adc328bbb349464'; \
             ;; \
         'x86_64') \
-            GHC_SHA256='a77a91a39d9b0167124b7e97648b2b52973ae0978cb259e0d44f0752a75037cb'; \
+            GHC_SHA256='5bf34ef70a2b824d45e525f09690c76707b7f01698962e425e8fd78b94ea9174'; \
             ;; \
         *) echo >&2 "error: unsupported architecture '$ARCH'" ; exit 1 ;; \
     esac; \
@@ -127,11 +113,9 @@ RUN set -eux; \
     gpgconf --kill all; \
     \
     tar xf ghc.tar.xz; \
-    cd "ghc-$GHC"; \
+    cd "ghc-$GHC-$ARCH-unknown-linux"; \
     ./configure --prefix "/opt/ghc/$GHC"; \
     make install; \
-    # remove profiling support to save space
-    find "/opt/ghc/$GHC/" \( -name "*_p.a" -o -name "*.p_hi" \) -type f -delete; \
     # remove some docs
     rm -rf "/opt/ghc/$GHC/share/"; \
     \
