@@ -8,7 +8,7 @@ RUN apt-get update && \
         libtinfo-dev && \
     rm -rf /var/lib/apt/lists/*
 
-ARG STACK=2.7.5
+ARG STACK=2.9.1
 ARG STACK_RELEASE_KEY=C5705533DA4F78D8664B5DC0575159689BEFB442
 
 RUN set -eux; \
@@ -25,7 +25,7 @@ RUN set -eux; \
             INSTALL_STACK="false"; \
             ;; \
         'x86_64') \
-            STACK_SHA256='9bcd165358d4dcafd2b33320d4fe98ce72faaf62300cc9b0fb86a27eb670da50'; \
+            STACK_SHA256='0581cebe880b8ed47556ee73d8bbb9d602b5b82e38f89f6aa53acaec37e7760d'; \
             ;; \
         *) echo >&2 "error: unsupported architecture '$ARCH'" ; exit 1 ;; \
     esac; \
@@ -48,7 +48,7 @@ RUN set -eux; \
         stack --version; \
     fi
 
-ARG CABAL_INSTALL=3.6.0.0
+ARG CABAL_INSTALL=3.8.1.0
 ARG CABAL_INSTALL_RELEASE_KEY=A970DF3AC3B9709706D74544B3D9F94B8DCAE210
 
 RUN set -eux; \
@@ -60,10 +60,10 @@ RUN set -eux; \
     # sha256 from https://downloads.haskell.org/~cabal/cabal-install-$CABAL_INSTALL/SHA256SUMS
     case "$ARCH" in \
         'aarch64') \
-            CABAL_INSTALL_SHA256='d9acee67d4308bc5c22d27bee034d388cc4192a25deff9e7e491e2396572b030'; \
+            CABAL_INSTALL_SHA256='c7fa9029f2f829432dd9dcf764e58605fbb7431db79234feb3e46684a9b37214'; \
             ;; \
         'x86_64') \
-            CABAL_INSTALL_SHA256='bfcb7350966dafe95051b5fc9fcb989c5708ab9e78191e71fc04647061668a11'; \
+            CABAL_INSTALL_SHA256='c71a1a46fd42d235bb86be968660815c24950e5da2d1ff4640da025ab520424b'; \
             ;; \
         *) echo >&2 "error: unsupported architecture '$ARCH'"; exit 1 ;; \
     esac; \
@@ -85,7 +85,7 @@ RUN set -eux; \
     \
     cabal --version
 
-ARG GHC=9.2.3
+ARG GHC=9.2.4
 ARG GHC_RELEASE_KEY=88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4
 
 RUN set -eux; \
@@ -95,10 +95,10 @@ RUN set -eux; \
     # sha256 from https://downloads.haskell.org/~ghc/$GHC/SHA256SUMS
     case "$ARCH" in \
         'aarch64') \
-            GHC_SHA256='4b0b3848606ca83923b666dc8325df6a93986682c57b2865a44c52795a30f808'; \
+            GHC_SHA256='fc7dbc6bae36ea5ac30b7e9a263b7e5be3b45b0eb3e893ad0bc2c950a61f14ec'; \
             ;; \
         'x86_64') \
-            GHC_SHA256='7a3198fff8ae59abe071103dbf4a55d595fe79e93e47d4e22f605097ae1402f1'; \
+            GHC_SHA256='a77a91a39d9b0167124b7e97648b2b52973ae0978cb259e0d44f0752a75037cb'; \
             ;; \
         *) echo >&2 "error: unsupported architecture '$ARCH'" ; exit 1 ;; \
     esac; \
